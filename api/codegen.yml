@@ -1,0 +1,12 @@
+overwrite: true
+documents: null
+schema: 'schema.gql'
+generates:
+  generated/types.d.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-resolvers'
+    config:
+      useIndexSignature: true
+      avoidOptionals: true
