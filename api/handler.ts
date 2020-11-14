@@ -1,12 +1,21 @@
-import { APIGatewayProxyHandler } from 'aws-lambda';
-import 'source-map-support/register';
+import { ApolloServer, gql } from 'apollo-server-lambda';
+import { importSchema } from 'graphql-import';
+import { resolvers } from './resolver';
 
-export const hello: APIGatewayProxyHandler = async (event, _context) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Go Serverless Webpack (Typescript) v1.0! Your function executed successfully!',
-      input: event,
-    }, null, 2),
-  };
-}
+// The GraphQL schema
+const typeDefs = importSchema('schema.gql');
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  mocks: true,
+  playground: {
+    endpoint: 'http://localhost:3000/dev/graphql'
+  }
+});
+
+export const graphqlHandler = server.createHandler({
+  cors: {
+    origin: '*',
+  },
+});

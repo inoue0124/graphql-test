@@ -30,12 +30,19 @@ const serverlessConfiguration: Serverless = {
   },
   functions: {
     hello: {
-      handler: 'handler.hello',
+      handler: 'handler.graphqlHandler',
       events: [
         {
           http: {
             method: 'get',
-            path: 'hello',
+            path: 'graphql',
+          }
+        },
+        {
+          http: {
+            method: 'post',
+            path: 'graphql',
+            cors: true,
           }
         }
       ]
