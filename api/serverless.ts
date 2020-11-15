@@ -12,12 +12,23 @@ const serverlessConfiguration: Serverless = {
     webpack: {
       webpackConfig: './webpack.config.js',
       includeModules: true
+    },
+    dynamodb: {
+      stages: ['dev'],
+      start: {
+        port: 3030,
+        inMemory: true,
+        migrate: true,
+        seed: false,
+      },
     }
   },
   // Add the serverless-webpack plugin
   plugins: [
     'serverless-webpack',
-    'serverless-offline'],
+    'serverless-offline',
+    'serverless-dynamodb-local'
+  ],
   provider: {
     name: 'aws',
     runtime: 'nodejs12.x',
@@ -29,7 +40,7 @@ const serverlessConfiguration: Serverless = {
     },
   },
   functions: {
-    hello: {
+    graphql: {
       handler: 'handler.graphqlHandler',
       events: [
         {
@@ -46,6 +57,32 @@ const serverlessConfiguration: Serverless = {
           }
         }
       ]
+    }
+  },
+  resources: {
+    Resources: {
+      PostTable: {
+        Type: 'AWS::DynamoDB::Table',
+        Properties: {
+          KeySchema: [
+            {
+              AttributeName: 'id',
+              KeyType: 'HASH'
+            }
+          ],
+          AttributeDefinitions: [
+            {
+              AttributeName: 'id',
+              AttributeType: 'S'
+            }
+          ],
+          ProvisionedThroughput: {
+            ReadCapacityUnits: 5,
+            WriteCapacityUnits: 5
+          },
+          TableName: 'Posts'
+        }
+      }
     }
   }
 }
