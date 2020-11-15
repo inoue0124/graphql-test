@@ -8,7 +8,6 @@ const typeDefs = importSchema('schema.gql');
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  mocks: true,
   playground: {
     endpoint: 'http://localhost:3000/dev/graphql'
   }

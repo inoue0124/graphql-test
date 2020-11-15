@@ -1,19 +1,45 @@
+scalar DateTime
+
 type Query {
-    product(id: String): Product
+    getPost(id: ID!): Post
+    indexPost(ids: [ID]): [Post]
 }
 
-type Product {
-    id: ID!
-    name: String!
-    brand: Brand!
-    url: String
-    image_url: String
-    reviewer_average: Float!
-    review_count: Int!
+type Mutation {
+    createPost(postCreateInput: PostCreateInput!): Post!
+    updatePost(postUpdateInput: PostUpdateInput!): Post!
+    deletePost(postDeleteInput: PostDeleteInput!): MutationResult!
 }
 
-type Brand {
+type Post {
     id: ID!
-    url: String
-    name: String!
+    title: String!
+    body: String!
+    createDate: DateTime!
+    updateDate: DateTime!
+}
+
+type MutationResult {
+    errorCode: String!
+    validationError: [ValidationError]
+}
+
+type ValidationError {
+    fieldName: String!
+    validationCode: String!
+}
+
+input PostCreateInput {
+    title: String!
+    body: String!
+}
+
+input PostUpdateInput {
+    id: ID!
+    title: String
+    body: String
+}
+
+input PostDeleteInput {
+    id: ID!
 }
